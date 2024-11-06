@@ -1,11 +1,11 @@
-module 3 consecutive_1s_mealy_overlapping(
+module three_consecutive_1s_mealy_overlapping(
   input clk,reset,c,
   output d);
   parameter s0=4'h1;
   parameter s1=4'h2;
   parameter s2=4'h3;
   
-  bit[2:0] state,next_state;
+  bit[3:0] state,next_state;
   
   always@(posedge clk or negedge reset)begin
     if(reset)
