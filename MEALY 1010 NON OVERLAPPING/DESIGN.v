@@ -1,4 +1,4 @@
-module mealy_1010_over(
+module mealy_1010_non_over(
        input clk,
        input reset,
        input c,
