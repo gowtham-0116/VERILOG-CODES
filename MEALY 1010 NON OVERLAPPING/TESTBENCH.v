@@ -4,7 +4,7 @@ module tb;
   reg clk, reset, c;
   wire d;
   
-  mealy_1010_over sd(clk, reset, c, d);
+  mealy_1010_non_over sd(clk, reset, c, d);
   initial clk = 0;   
   always #2 clk = ~clk;
     
