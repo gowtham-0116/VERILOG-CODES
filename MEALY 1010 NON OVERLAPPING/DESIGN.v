@@ -28,7 +28,7 @@ module mealy_1010_non_over(
       
       s1: begin
         if(c==0)
-          next_state = s3;
+          next_state = s2;
         else
           next_state = s1;
       end
