@@ -1,34 +1,31 @@
-module tb;
-  reg clk, reset;
-  reg j, k;
-  wire q, q_bar;
-  
-  jk_ff dff(clk, reset, j, k, q, q_bar);
-  
-  always #2 clk = ~clk;
-  initial begin
-    clk = 0; reset = 0;
-    $display("Reset=%b:q=%b, q_bar=%b", reset, q, q_bar);
-    #3 reset = 1;
-    $display("Reset=%b:q=%b, q_bar=%b", reset, q, q_bar);
-    
-    drive(2'b00);
-    drive(2'b01);
-    drive(2'b10);
-    drive(2'b11); 
-    drive(2'b11); 
-    #5;
-    $finish;
-  end
-  
-  task drive(bit [1:0] ip);
-    @(posedge clk);
-    {j,k} = ip;
-    #1 $display("j=%b, k=%b:q=%b, q_bar=%b",j, k, q, q_bar);
-  endtask
-  
-  initial begin
-    $dumpfile("dump.vcd");
-    $dumpvars(1);
-  end
+module TB;
+    reg j;
+    reg k;
+    reg clk;
+    reg reset;
+    wire q;
+    wire q_bar;
+  jk_ff dut (.j(j),.k(k),.clk(clk),.reset(reset),.q(q),.q_bar(q_bar));
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk; 
+    end
+    initial begin
+        j = 0;
+        k = 0;
+        reset = 1; 
+        #10 reset = 0;
+        j = 0; k = 0;
+        #10;
+        j = 1; k = 0;
+        #10;
+        j = 0; k = 1;
+        #10;
+        j = 1; k = 1;
+        #20;
+        $finish;
+    end
+    initial begin
+      $monitor("At time %0t: j=%b, k=%b, q=%b, q_bar=%b", $time, j, k, q, q_bar);
+    end
 endmodule
