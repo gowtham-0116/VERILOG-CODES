@@ -1,40 +1,45 @@
-// Code your testbench here
-// or browse Examples
-module tb;
-  reg j,k,reset,clk;
-  wire y;
+module jkfsm(input j,k,reset,clk,
+            output reg y);
   
-  jkfsm fsm(j,k,reset,clk,y);
+  parameter A=2'h0,
+  			B=2'h1;
   
-  initial begin
-    clk=0;
-    forever #5 clk=~clk;
+  reg [1:0] state,next_state;
+  
+  always@(posedge clk or posedge reset) begin
+    if(reset)
+      state<=A;
+    else
+      state<=next_state;
   end
   
-  initial begin
-    reset=1;j=0;k=0;
-    #15;
-    reset=0;
-    #15;
-    j=1;k=1;
-    #5;
-    j=1;k=0;
-    #5;
-    j=0;k=1;
-    #5;
-    j=0;k=0;
-    #5;
-   
-    $finish;
+  always@(j or k or state) begin
+    case(state)
+      A:begin
+        if(j==0)
+          next_state=A;
+        else
+          next_state=B;
+      end
+      
+      B:begin
+        if(k==0)
+          next_state=B;
+        else
+          next_state=A;
+      end
+      
+      default:next_state=A;
+      
+    endcase
   end
   
-  initial begin
-    $monitor("At time %0t : j=%b,k=%b,reset=%b,clk=%b,y=%b",$time,j,k,reset,clk,y);
-  end
-  
-  initial begin 
-    $dumpfile("jkff.vcd");
-    $dumpvars;
+  always@(state) begin
+    case(state)
+      A:y=0;
+      B:y=1;
+      default:y=0;
+    endcase
   end
   
 endmodule
